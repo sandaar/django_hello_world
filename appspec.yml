@@ -69,6 +69,6 @@ hooks:
 # During the ApplicationInstall deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   ApplicationStart:
-    - location: /webapp/start_app.sh    
+    - location: /start_app.sh    
       timeout: 300
       runas: root
