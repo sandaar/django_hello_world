@@ -6,7 +6,7 @@ fi
 if [[ $(docker ps -a --filter="name=app-nginx" | wc -l) -gt 1 ]]; then
     echo "app-nginx container already present"
 else
-    docker run -d --name app-nginx -p 80:80 --link hello_world_django:backend -v /webapp/nginx/:/etc/nginx/conf.d/ nginx 
+    docker run -d --name app-nginx -p 80:80 --link hello_world_django:backend -v /webapp/nginx/:/etc/nginx/conf.d/ -v /webapp:/webapp nginx 
 fi
 
 
