@@ -4,10 +4,6 @@ files:
   - source: /
     destination: /nginx
 hooks:
-#  BeforeInstall:
-#    - location: stop_app.sh
-#      timeout: 300
-#      runas: root
   ApplicationStart:
     - location: start_app.sh    
       timeout: 300
