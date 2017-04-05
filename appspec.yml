@@ -4,15 +4,7 @@ files:
   - source: /
     destination: /build
 hooks:
-  BeforeInstall:
-    - location: before_install.sh
-      timeout: 300
-      runas: root
   ApplicationStart:
     - location: start_app.sh    
-      timeout: 300
-      runas: root
-  AfterInstall:
-    - location: after_install.sh
       timeout: 300
       runas: root
