@@ -1,9 +1,9 @@
 if [ -f /lb_app ]; then
   mkdir /lb_app;
 else
-  rm -rf /lb_app/*
+  rm -f /lb_app/*
 fi
-cp -r /nginx/* /lb_app
+cp /nginx/* /lb_app
 
 if [[ $(docker ps -a --filter="name=app-nginx" | wc -l) -gt 1 ]]; then
     echo "app-nginx container already present" 
