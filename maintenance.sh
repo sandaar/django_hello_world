@@ -18,7 +18,7 @@ elif [ $1 = "off" ] && [ -f $PAGE_LOCATION/maintenance_on.html ]; then
   MESSAGE="switching OFF maintenance mode";
 else
   echo "nothing was changed";
-  exit 0
+  exit 0;
 fi
 
 aws deploy push --application-name $LB_APPLICATION_NAME --s3-location s3://$S3_LOCATION/LoadbalancerApp.zip --ignore-hidden-files --source $ROOT/nginx
