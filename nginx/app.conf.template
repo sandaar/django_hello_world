@@ -1,9 +1,6 @@
 upstream app {
   ip_hash;
-  server 172.31.9.241:8000;
-  server 172.31.26.145:8000;
-  server 172.31.32.217:8000;
-
+SERVERS
 }
 
 server {
