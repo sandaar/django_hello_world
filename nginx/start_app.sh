@@ -3,7 +3,7 @@ if [ -f /lb_app ]; then
 else
   rm -rf /lb_app/*
 fi
-cp /nginx/* /lb_app
+cp -r /nginx/* /lb_app
 
 if [[ $(docker ps -a --filter="name=app-nginx" | wc -l) -gt 1 ]]; then
     echo "app-nginx container already present" 
