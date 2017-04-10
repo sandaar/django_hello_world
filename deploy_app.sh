@@ -16,7 +16,7 @@ cmd="aws deploy get-deployment --deployment-id $deployment_id --query "deploymen
 status=$(eval $cmd)
 while ! [[ $status =~ ^(Failed|Succeeded|Stopped|Skipped)$ ]]; do
     sleep 5
-    echo "deployment status $status"
+    echo "app deployment status $status"
     status=$(eval $cmd)
 done
-echo "deployment completed with status $status"
+echo "app deployment completed with status $status"
