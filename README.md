@@ -16,3 +16,4 @@ Changes in this repo trigger new deployment in BuildAppDeploymentGroup which mea
 # to do
 - [ ] app deployment rollback 
 - [ ] add VPC
+- [ ] include aws cli configuration (both root and es2-user) to CloudFormation template
