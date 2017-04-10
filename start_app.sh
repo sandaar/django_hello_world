@@ -9,6 +9,6 @@ ROOT=/build
 
 $ROOT/maintenance.sh on
 
-./deploy_app.sh
+$ROOT/deploy_app.sh
 
 $ROOT/maintenance.sh off

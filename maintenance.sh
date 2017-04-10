@@ -24,7 +24,7 @@ else
   exit 0;
 fi
 
-./deploy_loadbalancer.sh
+$ROOT/deploy_loadbalancer.sh
 
 lb_dns_name=$(aws ec2 describe-instances --filter Name=tag:Name,Values=$LB_NAME_TAG --query "Reservations[].Instances[][PublicDnsName]" --output=text)
 echo "start lb_dns_name $lb_dns_name"
