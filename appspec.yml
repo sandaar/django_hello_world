@@ -6,5 +6,5 @@ files:
 hooks:
   ApplicationStart:
     - location: start_app.sh    
-      timeout: 300
+      timeout: 600 # pulling gunicorn/django image takes time for the first time
       runas: root
