@@ -25,7 +25,18 @@ else
 fi
 
 aws deploy push --application-name $LB_APPLICATION_NAME --s3-location s3://$S3_LOCATION/LoadbalancerApp.zip --ignore-hidden-files --source $ROOT/nginx
-aws deploy create-deployment --application-name $LB_APPLICATION_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $LB_DEPLOYMENT_GROUP_NAME --description "$DEPLOYMENT_DESCRIPTION" --s3-location bucket=$S3_LOCATION,bundleType=zip,key=LoadbalancerApp.zip
+output=$(aws deploy create-deployment --application-name $LB_APPLICATION_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $LB_DEPLOYMENT_GROUP_NAME --description "$DEPLOYMENT_DESCRIPTION" --s3-location bucket=$S3_LOCATION,bundleType=zip,key=LoadbalancerApp.zip)
+deployment_id=$(echo "$output" | sed '2q;d' | awk -v FS="(\"deploymentId\": \"|\")" '{print $2}')
+
+# wait for deployment completion
+cmd="aws deploy get-deployment --deployment-id $deployment_id --query "deploymentInfo.status" --output text"
+status=$(eval $cmd)
+while ! [[ $status =~ ^(Failed|Succeeded|Stopped|Skipped)$ ]]; do
+    sleep 5
+    echo "lb deployment status $status"
+    status=$(eval $cmd)
+done
+echo "lb deployment completed with status $status"
 
 lb_dns_name=$(aws ec2 describe-instances --filter Name=tag:Name,Values=$LB_NAME_TAG --query "Reservations[].Instances[][PublicDnsName]" --output=text)
 while [[ $(curl -s -o /dev/null -w "%{http_code}" $lb_dns_name) != $CODE ]]; do
