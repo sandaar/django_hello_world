@@ -1,5 +1,7 @@
 #!/bin/bash
+# run this script from the build server as update_nginx_conf.sh is using GNU sed 
 APP_NAME_TAG="StagingApp"
+
 
 private_ips=$(aws ec2 describe-instances --filter Name=tag:Name,Values=$APP_NAME_TAG --query "Reservations[].Instances[][PrivateIpAddress]" --output=text)
 printf "app servers private ips:\n$private_ips\n"
