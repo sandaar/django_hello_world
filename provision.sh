@@ -14,5 +14,5 @@ while [[ $(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "
 done
 echo "stack creation completed"
 # get app instances private ips and update nginx conf
-sleep 2
+sleep 5 # wait for instances private ips to be reserved otherwise will get None
 ./update_nginx_conf.sh
