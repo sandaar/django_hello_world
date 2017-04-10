@@ -27,8 +27,10 @@ fi
 ./deploy_loadbalancer.sh
 
 lb_dns_name=$(aws ec2 describe-instances --filter Name=tag:Name,Values=$LB_NAME_TAG --query "Reservations[].Instances[][PublicDnsName]" --output=text)
+echo "start lb_dns_name $lb_dns_name"
 while [[ $(curl -s -o /dev/null -w "%{http_code}" $lb_dns_name) != $CODE ]]; do
   sleep 2
+  echo "lb_dns_name $lb_dns_name"
   echo "$MESSAGE"
 done
 echo "done switching $1 maintenance mode"
