@@ -1,5 +1,5 @@
 {
-  "Description": "Create AutoScalingGroup for build servers ready for CodeDeploy and with docker installed.",
+  "Description": "Create AutoScalingGroup for build servers with CodeDeploy agent, docker, git installed.",
   "AWSTemplateFormatVersion": "2010-09-09",
   "Parameters": {
     "KeyPairName": {
@@ -292,6 +292,7 @@
                 "echo \"Waiting 30 seconds for Docker to start.....\"\n",
                 "sleep 30\n",
                 "usermod -a -G docker ec2-user\n",
+                "yum install -y git\n",
                 "# All is well, so signal success.\n",
                 "/opt/aws/bin/cfn-signal -e $? ",
                 "         --stack ", { "Ref" : "AWS::StackName" },
