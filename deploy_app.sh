@@ -1,10 +1,22 @@
+#!/bin/bash
+
+DEPLOYMENT_DESCRIPTION="staging deployment"
+S3_LOCATION=general_deploy_bucket
 APPLICATION_NAME="HelloWorld"
 DEPLOYMENT_GROUP_NAME="Staging"
-TAG_VALUE="StagingApp"
-SERVICE_ROLE_ARN="arn:aws:iam::767256184518:role/CodeDeployServiceRole"
-DEPLOYMENT_DESCRIPTION="staging deployment"
-GITHUB_REPO="sandaar/django_hello_world"
-COMMIT_ID="fa0dcfe320081144a5a1c41c79c5d5cde11a9d14"
+ROOT=/build
 
-aws deploy create-deployment-group --application-name $APPLICATION_NAME --ec2-tag-filters Key=Name,Type=KEY_AND_VALUE,Value=$TAG_VALUE --deployment-group-name $DEPLOYMENT_GROUP_NAME --service-role-arn $SERVICE_ROLE_ARN 
-#aws deploy create-deployment --application-name $APPLICATION_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --description "$DEPLOYMENT_DESCRIPTION" --github-location repository=$GITHUB_REPO,commitId=$COMMIT_ID
+
+aws deploy push --application-name $APPLICATION_NAME --s3-location s3://$S3_LOCATION/App.zip --ignore-hidden-files --source $ROOT/app
+output=$(aws deploy create-deployment --application-name $APPLICATION_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --description "$DEPLOYMENT_DESCRIPTION" --s3-location bucket=$S3_LOCATION,bundleType=zip,key=App.zip)
+deployment_id=$(echo "$output" | sed '2q;d' | awk -v FS="(\"deploymentId\": \"|\")" '{print $2}')
+
+# wait for deployment completion
+cmd="aws deploy get-deployment --deployment-id $deployment_id --query "deploymentInfo.status" --output text"
+status=$(eval $cmd)
+while ! [[ $status =~ ^(Failed|Succeeded|Stopped|Skipped)$ ]]; do
+    sleep 5
+    echo "deployment status $status"
+    status=$(eval $cmd)
+done
+echo "deployment completed with status $status"
